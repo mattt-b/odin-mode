@@ -27,6 +27,9 @@
     (modify-syntax-entry ?>  "." table)
     (modify-syntax-entry ??  "." table)
 
+    (modify-syntax-entry ?#   "_" table)
+    ;; (modify-syntax-entry ?\)  "_" table)
+
     ;; Modify some syntax entries to allow nested block comments
     (modify-syntax-entry ?/ ". 124b" table)
     (modify-syntax-entry ?* ". 23n" table)
@@ -36,36 +39,96 @@
     table))
 
 (defconst odin-builtins
-  '("cast" "proc" "new" "package" "make" "map" "typeid" "type_info_of"
-    "auto_cast" "bit_set" "union" "len" "distict" "dynamic" "delete" "type_of" "alloc"))
+  '("len" "cap"
+    "typeid_of" "type_info_of"
+    "swizzle" "complex" "real" "imag" "conj"
+    "min" "max" "abs" "clamp"
+    "expand_to_tuple"
+
+    "init_global_temporary_allocator"
+    "copy" "pop" "unordered_remove" "ordered_remove" "clear" "reserve"
+    "resize" "new" "new_clone" "free" "free_all" "delete" "make"
+    "clear_map" "reserve_map" "delete_key" "append_elem" "append_elems"
+    "append" "append_string" "clear_dynamic_array" "reserve_dynamic_array"
+    "resize_dynamic_array" "incl_elem" "incl_elems" "incl_bit_set"
+    "excl_elem" "excl_elems" "excl_bit_set" "incl" "excl" "card"
+    "assert" "panic" "unimplemented" "unreachable"))
 
 (defconst odin-keywords
-  '("if" "else" "do" "when" "while" "for" "switch" "case" "struct" "enum"
-    "return" "remove" "continue" "fallthrough" "break" "defer" "inline" "proc"
-    "import" "using" "#assert" "#no_bounds_check" "#align" "#packed" "#raw_union"
-    "foreign" "cast" "proc" "new" "package" "make" "map" "typeid" "type_info_of"
-    "auto_cast" "bit_set" "union" "len" "distict" "dynamic" "delete" "type_of" "alloc"))
+  '("import" "export" "foreign" "package"
+    "when" "if" "else" "for" "switch" "in" "notin" "do" "case"
+    "break" "continue" "fallhrough" "defer" "return" "proc"
+    "struct" "union" "enum" "bit_field" "bit_set" "map" "static" "dynamic"
+    "auto_cast" "cast" "transmute" "distinct" "opaque"
+    "using" "inline" "no_inline"
+    "size_of" "align_of" "offset_of" "type_of"
+    ;; "_" "context"
+
+    ;; Reserved
+    ;; "macro" "asm" "yield" "await"
+    ;; "const"
+    ))
 
 (defconst odin-constants
-  '("null" "true" "false"))
+  '("nil" "true" "false"
+    "ODIN_OS" "ODIN_ARCH" "ODIN_ENDIAN" "ODIN_VENDOR"
+    "ODIN_VERSION" "ODIN_ROOT" "ODIN_DEBUG"))
 
 (defconst odin-typenames
-  '("int" "uint" "u64" "u32" "u16" "u8"
-    "s64" "s32" "s16" "s8" "float"
-    "float32" "float64" "string"
-    "complex64" "complex128" "uintptr"
-    "bool" "b8" "b16" "b32" "b64"
-    "rune" "rawptr" "any" "cstring"
-    "^" "&" "$" "@"))
+  '("bool" "b8" "b16" "b32" "b64"
+
+    "int"  "i8" "i16" "i32" "i64"
+    "i16le" "i32le" "i64le"
+    "i16be" "i32be" "i64be"
+
+    "uint" "u8" "u16" "u32" "u64"
+    "u16le" "u32le" "u64le"
+    "u16be" "u32be" "u64be"
+
+    "f32" "f64"
+    "complex64" "complex128"
+
+    "rune"
+    "string" "cstring"
+
+    "uintptr" "rawptr"
+    "typeid" "any"
+    "byte"))
+
+(defconst odin-attributes
+  '("builtin"
+    "deferred_in" "deferred_none" "deferred_out"
+    "default_calling_convention" "link_name" "link_prefix"
+    "deprecated" "private" "thread_local"))
+
+(defconst odin-directives
+  '(
+    "#assert"
+    "#caller_location" "#file" "#line" "#location" "#procedure"
+    "#defined"
+    "#require_results"
+    "#bounds_check" "#no_bounds_check"))
 
 (defun odin-wrap-word-rx (s)
   (concat "\\<" s "\\>"))
+
+(defun odin-wrap-directive-rx (s)
+  (concat "\\_<" s "\\>"))
+
+(defun odin-wrap-attribute-rx (s)
+  (concat "[[:space:]\n]*@[[:space:]\n]*([[:space:]\n]*" s "\\>"))
 
 (defun odin-keywords-rx (keywords)
   "build keyword regexp"
   (odin-wrap-word-rx (regexp-opt keywords t)))
 
-(defconst odin-hat-type-rx (rx (group (and "^" (1+ word)))))
+(defun odin-directives-rx (directives)
+  (odin-wrap-directive-rx (regexp-opt directives t)))
+
+(defun odin-attributes-rx (attributes)
+  (odin-wrap-attribute-rx (regexp-opt attributes t)))
+
+(defconst odin-hat-type-rx (rx (group (and "^" (1+ (any word "."))))))
 (defconst odin-dollar-type-rx (rx (group "$" (or (1+ word) (opt "$")))))
 (defconst odin-number-rx
   (rx (and
@@ -77,6 +140,12 @@
 
 (defconst odin-font-lock-defaults
   `(
+    ;; Hash directives
+    (,(odin-directives-rx odin-directives) 1 font-lock-preprocessor-face)
+
+    ;; At directives
+    (,(odin-attributes-rx odin-attributes) 1 font-lock-preprocessor-face)
+
     ;; Keywords
     (,(odin-keywords-rx odin-keywords) 1 font-lock-keyword-face)
 
@@ -89,12 +158,6 @@
     ;; Constants
     (,(odin-keywords-rx odin-constants) 1 font-lock-constant-face)
 
-    ;; Hash directives
-    ("#\\w+" . font-lock-preprocessor-face)
-
-    ;; At directives
-    ("@\\w+" . font-lock-preprocessor-face)
-
     ;; Strings
     ("\\\".*\\\"" . font-lock-string-face)
 
@@ -102,11 +165,12 @@
     (,(odin-wrap-word-rx odin-number-rx) . font-lock-constant-face)
 
     ;; Types
-    (,(odin-keywords-rx odin-typenames) 1 font-lock-type-face)
     (,odin-hat-type-rx 1 font-lock-type-face)
     (,odin-dollar-type-rx 1 font-lock-type-face)
+    (,(odin-keywords-rx odin-typenames) 1 font-lock-type-face)
 
     ("---" . font-lock-constant-face)
+    ("\\.\\." . font-lock-constant-face)
     ))
 
 ;; add setq-local for older emacs versions
@@ -164,20 +228,20 @@
 
 ;;;###autoload
 (define-derived-mode odin-mode odin-parent-mode "Odin"
- :syntax-table odin-mode-syntax-table
- :group 'odin
- (setq bidi-paragraph-direction 'left-to-right)
- (setq-local require-final-newline mode-require-final-newline)
- (setq-local parse-sexp-ignore-comments t)
- (setq-local comment-start-skip "\\(//+\\|/\\*+\\)\\s *")
- (setq-local comment-start "/*")
- (setq-local comment-end "*/")
- (setq-local indent-line-function 'js-indent-line)
- (setq-local font-lock-defaults '(odin-font-lock-defaults))
- (setq-local beginning-of-defun-function 'odin-beginning-of-defun)
- (setq-local end-of-defun-function 'odin-end-of-defun)
+  :syntax-table odin-mode-syntax-table
+  :group 'odin
+  (setq bidi-paragraph-direction 'left-to-right)
+  (setq-local require-final-newline mode-require-final-newline)
+  (setq-local parse-sexp-ignore-comments t)
+  (setq-local comment-start-skip "\\(//+\\|/\\*+\\)\\s *")
+  (setq-local comment-start "/*")
+  (setq-local comment-end "*/")
+  (setq-local indent-line-function 'js-indent-line)
+  (setq-local font-lock-defaults '(odin-font-lock-defaults))
+  (setq-local beginning-of-defun-function 'odin-beginning-of-defun)
+  (setq-local end-of-defun-function 'odin-end-of-defun)
 
- (font-lock-fontify-buffer))
+  (font-lock-fontify-buffer))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.odin\\'" . odin-mode))
