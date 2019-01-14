@@ -102,7 +102,10 @@
     "deprecated" "private" "thread_local"))
 
 (defconst odin-directives
-  '(
+  '("#align" "#packed"
+    "#raw_union"
+    "#no_alias" "#type"
+    "#c_vararg"
     "#assert"
     "#caller_location" "#file" "#line" "#location" "#procedure"
     "#defined"
