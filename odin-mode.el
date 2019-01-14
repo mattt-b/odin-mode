@@ -10,8 +10,6 @@
     (modify-syntax-entry ?\\ "\\" table)
 
     ;; additional symbols
-    (modify-syntax-entry ?_ "w" table)
-
     (modify-syntax-entry ?' "." table)
     (modify-syntax-entry ?: "." table)
     (modify-syntax-entry ?+  "." table)
@@ -27,8 +25,8 @@
     (modify-syntax-entry ?>  "." table)
     (modify-syntax-entry ??  "." table)
 
+    ;; Need this for #directive regexes to work correctly
     (modify-syntax-entry ?#   "_" table)
-    ;; (modify-syntax-entry ?\)  "_" table)
 
     ;; Modify some syntax entries to allow nested block comments
     (modify-syntax-entry ?/ ". 124b" table)
