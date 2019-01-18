@@ -60,7 +60,9 @@
     "auto_cast" "cast" "transmute" "distinct" "opaque"
     "using" "inline" "no_inline"
     "size_of" "align_of" "offset_of" "type_of"
-    ;; "_" "context"
+
+    "context"
+    ;; "_"
 
     ;; Reserved
     "macro" "asm" "yield" "await"
