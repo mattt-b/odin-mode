@@ -114,6 +114,9 @@
 (defun odin-wrap-word-rx (s)
   (concat "\\<" s "\\>"))
 
+(defun odin-wrap-keyword-rx (s)
+  (concat "\\_<" s "\\_>"))
+
 (defun odin-wrap-directive-rx (s)
   (concat "\\_<" s "\\>"))
 
@@ -122,7 +125,7 @@
 
 (defun odin-keywords-rx (keywords)
   "build keyword regexp"
-  (odin-wrap-word-rx (regexp-opt keywords t)))
+  (odin-wrap-keyword-rx (regexp-opt keywords t)))
 
 (defun odin-directives-rx (directives)
   (odin-wrap-directive-rx (regexp-opt directives t)))
