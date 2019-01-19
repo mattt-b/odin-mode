@@ -133,8 +133,8 @@
 (defun odin-attributes-rx (attributes)
   (odin-wrap-attribute-rx (regexp-opt attributes t)))
 
-(defconst odin-hat-type-rx (rx (group (and "^" (1+ (any word "."))))))
-(defconst odin-dollar-type-rx (rx (group "$" (or (1+ word) (opt "$")))))
+(defconst odin-hat-type-rx (rx (group (and "^" (1+ (any word "." "_"))))))
+(defconst odin-dollar-type-rx (rx (group "$" (or (1+ (any word "_")) (opt "$")))))
 (defconst odin-number-rx
   (rx (and
        symbol-start
@@ -145,6 +145,11 @@
 
 (defconst odin-font-lock-defaults
   `(
+    ;; Types
+    (,odin-hat-type-rx 1 font-lock-type-face)
+    (,odin-dollar-type-rx 1 font-lock-type-face)
+    (,(odin-keywords-rx odin-typenames) 1 font-lock-type-face)
+
     ;; Hash directives
     (,(odin-directives-rx odin-directives) 1 font-lock-preprocessor-face)
 
@@ -168,11 +173,6 @@
 
     ;; Numbers
     (,(odin-wrap-word-rx odin-number-rx) . font-lock-constant-face)
-
-    ;; Types
-    (,odin-hat-type-rx 1 font-lock-type-face)
-    (,odin-dollar-type-rx 1 font-lock-type-face)
-    (,(odin-keywords-rx odin-typenames) 1 font-lock-type-face)
 
     ("---" . font-lock-constant-face)
     ("\\.\\." . font-lock-constant-face)
