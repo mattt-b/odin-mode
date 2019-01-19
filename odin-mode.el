@@ -115,7 +115,7 @@
   (concat "\\<" s "\\>"))
 
 (defun odin-wrap-keyword-rx (s)
-  (concat "\\_<" s "\\_>"))
+  (concat "\\_<\\<" s "\\_>"))
 
 (defun odin-wrap-directive-rx (s)
   (concat "\\_<" s "\\>"))
