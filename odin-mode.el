@@ -55,7 +55,7 @@
 (defconst odin-keywords
   '("import" "export" "foreign" "package"
     "when" "if" "else" "for" "switch" "in" "notin" "do" "case"
-    "break" "continue" "fallhrough" "defer" "return" "proc"
+    "break" "continue" "fallthrough" "defer" "return" "proc"
     "struct" "union" "enum" "bit_field" "bit_set" "map" "static" "dynamic"
     "auto_cast" "cast" "transmute" "distinct" "opaque"
     "using" "inline" "no_inline"
