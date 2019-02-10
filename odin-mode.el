@@ -103,6 +103,7 @@
 (defconst odin-directives
   '("#align" "#packed"
     "#raw_union"
+    "#complete"
     "#no_alias" "#type"
     "#c_vararg"
     "#assert"
