@@ -1,9 +1,9 @@
 ;;; odin-mode.el --- A minor mode for odin
 
-;; Author: mattt-b
+;; Author: Ethan Morgan
 ;; Keywords: odin, language, languages, mode
 ;; Package-Requires: ((emacs "24.1"))
-;; Homepage: https://github.com/mattt-b/odin-mode
+;; Homepage: https://github.com/glassofethanol/odin-mode
 
 ;; This file is NOT part of GNU Emacs.
 
