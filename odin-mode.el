@@ -1,4 +1,13 @@
-;; odin-mode.el - A minor mode for odin
+;;; odin-mode.el --- A minor mode for odin
+
+;; Author: Ethan Morgan
+;; Keywords: odin, language, languages, mode
+;; Package-Requires: ((emacs "24.1"))
+;; Homepage: https://github.com/glassofethanol/odin-mode
+
+;; This file is NOT part of GNU Emacs.
+
+;;; Code:
 
 (require 'cl)
 (require 'rx)
