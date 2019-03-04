@@ -62,10 +62,10 @@
     "assert" "panic" "unimplemented" "unreachable"))
 
 (defconst odin-keywords
-  '("import" "export" "foreign" "package"
+  '("import" "foreign" "package"
     "when" "if" "else" "for" "switch" "in" "notin" "do" "case"
     "break" "continue" "fallthrough" "defer" "return" "proc"
-    "struct" "union" "enum" "bit_field" "bit_set" "map" "static" "dynamic"
+    "struct" "union" "enum" "bit_field" "bit_set" "map" "dynamic"
     "auto_cast" "cast" "transmute" "distinct" "opaque"
     "using" "inline" "no_inline"
     "size_of" "align_of" "offset_of" "type_of"
@@ -105,6 +105,8 @@
 
 (defconst odin-attributes
   '("builtin"
+    "export"
+    "static"
     "deferred_in" "deferred_none" "deferred_out"
     "default_calling_convention" "link_name" "link_prefix"
     "deprecated" "private" "thread_local"))
