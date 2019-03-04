@@ -131,7 +131,7 @@
   (concat "\\_<" s "\\>"))
 
 (defun odin-wrap-attribute-rx (s)
-  (concat "[[:space:]\n]*@[[:space:]\n]*([[:space:]\n]*" s "\\>"))
+  (concat "[[:space:]\n]*@[[:space:]\n]*(?[[:space:]\n]*" s "\\>"))
 
 (defun odin-keywords-rx (keywords)
   "build keyword regexp"
