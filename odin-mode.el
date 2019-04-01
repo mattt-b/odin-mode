@@ -74,8 +74,7 @@
     ;; "_"
 
     ;; Reserved
-    "macro" "asm" "yield" "await"
-    "const"))
+    "macro" "const"))
 
 (defconst odin-constants
   '("nil" "true" "false"
