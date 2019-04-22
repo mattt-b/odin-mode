@@ -118,6 +118,7 @@
     "#c_vararg"
     "#assert"
     "#caller_location" "#file" "#line" "#location" "#procedure"
+    "#load"
     "#defined"
     "#require_results"
     "#bounds_check" "#no_bounds_check"))
