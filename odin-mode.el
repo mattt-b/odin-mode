@@ -87,6 +87,9 @@
     "int"  "i8" "i16" "i32" "i64"
     "i16le" "i32le" "i64le"
     "i16be" "i32be" "i64be"
+    "i128" "u128"
+    "i128le" "u128le"
+    "i128be" "u128be"
 
     "uint" "u8" "u16" "u32" "u64"
     "u16le" "u32le" "u64le"
@@ -187,6 +190,7 @@
     (,(odin-wrap-word-rx odin-number-rx) . font-lock-constant-face)
 
     ("---" . font-lock-constant-face)
+    ("\\.\\.<" . font-lock-constant-face)
     ("\\.\\." . font-lock-constant-face)
     ))
 
