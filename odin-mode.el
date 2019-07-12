@@ -13,6 +13,9 @@
 (require 'rx)
 (require 'js)
 
+(defgroup odin nil
+  "Odin mode")
+
 (defconst odin-mode-syntax-table
   (let ((table (make-syntax-table)))
     (modify-syntax-entry ?\" "\"" table)
@@ -116,6 +119,7 @@
 (defconst odin-directives
   '("#align" "#packed"
     "#raw_union"
+    "#no_nil"
     "#complete"
     "#no_alias" "#type"
     "#c_vararg"
