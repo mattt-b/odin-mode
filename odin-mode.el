@@ -265,6 +265,8 @@
   (setq-local font-lock-defaults '(odin-font-lock-defaults))
   (setq-local beginning-of-defun-function 'odin-beginning-of-defun)
   (setq-local end-of-defun-function 'odin-end-of-defun)
+  (setq-local electric-indent-chars
+              (append "{}():;," electric-indent-chars))
 
   (font-lock-fontify-buffer))
 
