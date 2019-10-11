@@ -32,7 +32,7 @@
     (modify-syntax-entry ?| "." table)
     (modify-syntax-entry ?^ "." table)
     (modify-syntax-entry ?! "." table)
-    (modify-syntax-entry ?$ "/" table)
+    (modify-syntax-entry ?$ "." table)
     (modify-syntax-entry ?= "." table)
     (modify-syntax-entry ?< "." table)
     (modify-syntax-entry ?> "." table)
