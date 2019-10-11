@@ -51,7 +51,8 @@
 (defconst odin-builtins
   '("len" "cap"
     "typeid_of" "type_info_of"
-    "swizzle" "complex" "real" "imag" "conj"
+    "swizzle" "complex" "real" "imag" "quaternion" "conj"
+    "jmag" "kmag"
     "min" "max" "abs" "clamp"
     "expand_to_tuple"
 
@@ -66,7 +67,7 @@
 
 (defconst odin-keywords
   '("import" "foreign" "package"
-    "when" "if" "else" "for" "switch" "in" "notin" "do" "case"
+    "where" "when" "if" "else" "for" "switch" "in" "notin" "do" "case"
     "break" "continue" "fallthrough" "defer" "return" "proc"
     "struct" "union" "enum" "bit_field" "bit_set" "map" "dynamic"
     "auto_cast" "cast" "transmute" "distinct" "opaque"
@@ -101,6 +102,8 @@
     "f32" "f64"
     "complex64" "complex128"
 
+    "quaternion128" "quaternion256"
+
     "rune"
     "string" "cstring"
 
@@ -113,6 +116,7 @@
     "export"
     "static"
     "deferred_in" "deferred_none" "deferred_out"
+    "require_results"
     "default_calling_convention" "link_name" "link_prefix"
     "deprecated" "private" "thread_local"))
 
@@ -127,7 +131,6 @@
     "#caller_location" "#file" "#line" "#location" "#procedure"
     "#load"
     "#defined"
-    "#require_results"
     "#bounds_check" "#no_bounds_check"))
 
 (defun odin-wrap-word-rx (s)
