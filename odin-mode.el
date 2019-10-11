@@ -22,7 +22,7 @@
     (modify-syntax-entry ?\\ "\\" table)
 
     ;; additional symbols
-    (modify-syntax-entry ?' "." table)
+    (modify-syntax-entry ?' "/" table)
     (modify-syntax-entry ?: "." table)
     (modify-syntax-entry ?+ "." table)
     (modify-syntax-entry ?- "." table)
@@ -179,7 +179,7 @@
     (,(odin-keywords-rx odin-keywords) 1 font-lock-keyword-face)
 
     ;; single quote characters
-    ("\\('[[:word:]]\\)\\>" 1 font-lock-constant-face)
+    ("'\\(\\\\.\\|[^']\\)'" . font-lock-constant-face)
 
     ;; Variables
     (,(odin-keywords-rx odin-builtins) 1 font-lock-variable-name-face)
