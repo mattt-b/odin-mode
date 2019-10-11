@@ -22,7 +22,8 @@
     (modify-syntax-entry ?\\ "\\" table)
 
     ;; additional symbols
-    (modify-syntax-entry ?' "/" table)
+    (modify-syntax-entry ?' "\"" table)
+    (modify-syntax-entry ?` "\"" table)
     (modify-syntax-entry ?: "." table)
     (modify-syntax-entry ?+ "." table)
     (modify-syntax-entry ?- "." table)
@@ -191,7 +192,7 @@
     (,(odin-keywords-rx odin-constants) 1 font-lock-constant-face)
 
     ;; Strings
-    ("\\\".*\\\"" . font-lock-string-face)
+    ;; ("\\\".*\\\"" . font-lock-string-face)
 
     ;; Numbers
     (,(odin-wrap-word-rx odin-number-rx) . font-lock-constant-face)
