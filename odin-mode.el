@@ -132,7 +132,8 @@
     "#caller_location" "#file" "#line" "#location" "#procedure"
     "#load"
     "#defined"
-    "#bounds_check" "#no_bounds_check"))
+    "#bounds_check" "#no_bounds_check"
+    "#partial" ))
 
 (defun odin-wrap-word-rx (s)
   (concat "\\<" s "\\>"))
