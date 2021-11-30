@@ -9,12 +9,13 @@
 
 ;;; Code:
 
-(require 'cl)
+(require 'cl-lib)
 (require 'rx)
 (require 'js)
 
 (defgroup odin nil
-  "Odin mode")
+  "Odin mode"
+  :group 'languages)
 
 (defconst odin-mode-syntax-table
   (let ((table (make-syntax-table)))
@@ -121,19 +122,27 @@
     "default_calling_convention" "link_name" "link_prefix"
     "deprecated" "private" "thread_local"))
 
+
+(defconst odin-proc-directives
+  '("#force_inline"
+    "#force_no_inline"
+    "#type")
+  "Directives that can appear before a proc declaration")
+
 (defconst odin-directives
-  '("#align" "#packed"
-    "#raw_union"
-    "#no_nil"
-    "#complete"
-    "#no_alias" "#type"
-    "#c_vararg"
-    "#assert"
-    "#caller_location" "#file" "#line" "#location" "#procedure"
-    "#load"
-    "#defined"
-    "#bounds_check" "#no_bounds_check"
-    "#partial" ))
+  (append '("#align" "#packed"
+            "#any_int"
+            "#raw_union"
+            "#no_nil"
+            "#complete"
+            "#no_alias"
+            "#c_vararg"
+            "#assert"
+            "#file" "#line" "#location" "#procedure" "#caller_location"
+            "#load"
+            "#defined"
+            "#bounds_check" "#no_bounds_check"
+            "#partial") odin-proc-directives))
 
 (defun odin-wrap-word-rx (s)
   (concat "\\<" s "\\>"))
@@ -157,6 +166,7 @@
 (defun odin-attributes-rx (attributes)
   (odin-wrap-attribute-rx (regexp-opt attributes t)))
 
+(defconst odin-identifier-rx "[[:word:][:multibyte:]_]+")
 (defconst odin-hat-type-rx (rx (group (and "^" (1+ (any word "." "_"))))))
 (defconst odin-dollar-type-rx (rx (group "$" (or (1+ (any word "_")) (opt "$")))))
 (defconst odin-number-rx
@@ -166,6 +176,9 @@
            (and "0" (any "xX") (+ hex-digit)))
        (opt (and (any "_" "A-Z" "a-z") (* (any "_" "A-Z" "a-z" "0-9"))))
        symbol-end)))
+(defconst odin-proc-rx (concat "\\(\\_<" odin-identifier-rx "\\_>\\)\\s *::\\s *\\(" (odin-directives-rx odin-proc-directives) "\\)?\\s *\\_<proc\\_>"))
+(defconst odin-type-rx (concat "\\(\\_<" odin-identifier-rx "\\_>\\)\\s *::\\s *\\_<struct\\|enum\\|union\\_>"))
+
 
 (defconst odin-font-lock-defaults
   `(
@@ -173,6 +186,7 @@
     (,odin-hat-type-rx 1 font-lock-type-face)
     (,odin-dollar-type-rx 1 font-lock-type-face)
     (,(odin-keywords-rx odin-typenames) 1 font-lock-type-face)
+    (,odin-type-rx 1 font-lock-type-face)
 
     ;; Hash directives
     (,(odin-directives-rx odin-directives) 1 font-lock-preprocessor-face)
@@ -187,7 +201,7 @@
     ("'\\(\\\\.\\|[^']\\)'" . font-lock-constant-face)
 
     ;; Variables
-    (,(odin-keywords-rx odin-builtins) 1 font-lock-variable-name-face)
+    (,(odin-keywords-rx odin-builtins) 1 font-lock-builtin-face)
 
     ;; Constants
     (,(odin-keywords-rx odin-constants) 1 font-lock-constant-face)
@@ -197,6 +211,9 @@
 
     ;; Numbers
     (,(odin-wrap-word-rx odin-number-rx) . font-lock-constant-face)
+
+    ;; Procedures
+    (,odin-proc-rx 1 font-lock-function-name-face)
 
     ("---" . font-lock-constant-face)
     ("\\.\\.<" . font-lock-constant-face)
@@ -272,8 +289,12 @@
   (setq-local end-of-defun-function 'odin-end-of-defun)
   (setq-local electric-indent-chars
               (append "{}():;," electric-indent-chars))
+  (setq indent-tabs-mode t)
+  (setq imenu-generic-expression
+        `(("type" ,(concat "^" odin-type-rx) 1)
+          ("proc" ,(concat "^" odin-proc-rx) 1)))
 
-  (font-lock-fontify-buffer))
+  (font-lock-ensure))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.odin\\'" . odin-mode))
