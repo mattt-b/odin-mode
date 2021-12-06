@@ -177,7 +177,8 @@
        (opt (and (any "_" "A-Z" "a-z") (* (any "_" "A-Z" "a-z" "0-9"))))
        symbol-end)))
 (defconst odin-proc-rx (concat "\\(\\_<" odin-identifier-rx "\\_>\\)\\s *::\\s *\\(" (odin-directives-rx odin-proc-directives) "\\)?\\s *\\_<proc\\_>"))
-(defconst odin-type-rx (concat "\\(\\_<" odin-identifier-rx "\\_>\\)\\s *::\\s *\\_<struct\\|enum\\|union\\_>"))
+
+(defconst odin-type-rx (concat "\\_<\\(" odin-identifier-rx "\\)\\s *::\\s *\\(?:struct\\|enum\\|union\\|distinct\\)\\s *\\_>"))
 
 
 (defconst odin-font-lock-defaults
