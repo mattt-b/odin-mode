@@ -17,6 +17,11 @@
   "Odin mode"
   :group 'languages)
 
+;; `compilation-mode' configuration
+
+(eval-after-load 'compile
+ '(add-to-list 'compilation-error-regexp-alist '("^\\(.*?\\)(\\([0-9]+\\):\\([0-9]+\\).*" 1 2 3)))
+
 (defconst odin-mode-syntax-table
   (let ((table (make-syntax-table)))
     (modify-syntax-entry ?\" "\"" table)
