@@ -305,7 +305,19 @@
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.odin\\'" . odin-mode))
 
-(provide 'odin-mode)
+;; Lsp-mode configuration
+(defcustom odin-language-server-executable "ols"
+  "Executable to run odin-lsp. Default: ols"
+  :type 'string)
 
+(with-eval-after-load 'lsp-mode
+  (add-to-list 'lsp-language-id-configuration
+	       '(odin-mode . "odin"))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection odin-language-server-executable)
+		    :activation-fn  (lsp-activate-on "odin")
+		    :server-id      'ols)))
+
+(provide 'odin-mode)
 
 ;;; odin-mode.el ends here
