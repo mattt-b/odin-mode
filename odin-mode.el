@@ -284,6 +284,7 @@
 (define-derived-mode odin-mode odin-parent-mode "Odin"
   :syntax-table odin-mode-syntax-table
   :group 'odin
+  (setq-local js-indent-level tab-width)
   (setq bidi-paragraph-direction 'left-to-right)
   (setq-local require-final-newline mode-require-final-newline)
   (setq-local parse-sexp-ignore-comments t)
